@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaExchange.ConsoleApp", "MetaExchange.ConsoleApp\MetaExchange.ConsoleApp.csproj", "{5672A567-7720-45CC-9F80-146807FB6139}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaExchange.Core", "MetaExchange.Core\MetaExchange.Core.csproj", "{DBC3722C-D388-4DC1-BE4D-08EA90D5E39C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{5672A567-7720-45CC-9F80-146807FB6139}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5672A567-7720-45CC-9F80-146807FB6139}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5672A567-7720-45CC-9F80-146807FB6139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC3722C-D388-4DC1-BE4D-08EA90D5E39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC3722C-D388-4DC1-BE4D-08EA90D5E39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC3722C-D388-4DC1-BE4D-08EA90D5E39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC3722C-D388-4DC1-BE4D-08EA90D5E39C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
