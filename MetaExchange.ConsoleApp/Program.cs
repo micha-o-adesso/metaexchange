@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using MetaExchange.Core;
+
 Console.WriteLine("Hello, World!");
+var orderAdviser = new OrderAdviser();
