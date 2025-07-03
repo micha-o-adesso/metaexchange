@@ -1,0 +1,22 @@
+﻿using MetaExchange.Core.Domain.Exchange;
+using MetaExchange.Core.Domain.Exchange.Model;
+
+namespace MetaExchange.Tests;
+
+/// <summary>
+/// A mock implementation of the IExchangeDataProvider interface for testing purposes.
+/// </summary>
+public class MockExchangeDataProvider : IExchangeDataProvider
+{
+    private readonly IEnumerable<Exchange> _exchanges;
+    
+    public MockExchangeDataProvider(IEnumerable<Exchange> exchanges)
+    {
+        _exchanges = exchanges;
+    }
+    
+    public IEnumerable<Exchange> GetExchanges()
+    {
+        return _exchanges;
+    }
+}
