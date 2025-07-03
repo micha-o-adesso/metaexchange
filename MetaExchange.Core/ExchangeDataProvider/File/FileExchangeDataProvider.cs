@@ -6,9 +6,15 @@ namespace MetaExchange.Core.ExchangeDataProvider.File;
 
 public class FileExchangeDataProvider(string rootFolderPath) : IExchangeDataProvider
 {
+    /// <summary>
+    /// The search pattern "*.json" for JSON files.
+    /// </summary>
+    private const string JsonFileSearchPattern = "*.json";
+    
     public IEnumerable<Exchange> GetExchanges()
     {
-        foreach (var jsonFilePath in Directory.EnumerateFiles(rootFolderPath, "*.json"))
+        
+        foreach (var jsonFilePath in Directory.EnumerateFiles(rootFolderPath, JsonFileSearchPattern))
         {
             var exchange = DeserializeExchange(jsonFilePath);
             if (exchange != null)

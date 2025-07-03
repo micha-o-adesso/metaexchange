@@ -18,12 +18,12 @@ public class Order
     /// <summary>
     /// The type of the order (e.g. "Buy", "Sell").
     /// </summary>
-    public required string Type { get; set; }
+    public required OrderType Type { get; set; }
 
     /// <summary>
     /// The kind of the order (e.g. "Market", "Limit").
     /// </summary>
-    public required string Kind { get; set; }
+    public required OrderKind Kind { get; set; }
 
     /// <summary>
     /// The amount of cryptocurrency to buy or sell (e.g. 0.01).

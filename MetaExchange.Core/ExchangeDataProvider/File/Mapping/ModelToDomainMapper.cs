@@ -42,10 +42,29 @@ public static class ModelToDomainMapper
          {
              Id = model.Id,
              Time = model.Time,
-             Type = model.Type,
-             Kind = model.Kind,
+             Type = model.Type.ToDomain(),
+             Kind = model.Kind.ToDomain(),
              Amount = model.Amount,
              Price = model.Price
+         };
+     }
+
+     private static OrderType ToDomain(this Model.OrderType model)
+     {
+         return model switch
+         {
+             Model.OrderType.Buy => OrderType.Buy,
+             Model.OrderType.Sell => OrderType.Sell,
+             _ => throw new ArgumentOutOfRangeException(nameof(model), model, null)
+         };
+     }
+
+     private static OrderKind ToDomain(this Model.OrderKind model)
+     {
+         return model switch
+         {
+             Model.OrderKind.Limit => OrderKind.Limit,
+             _ => throw new ArgumentOutOfRangeException(nameof(model), model, null)
          };
      }
 }
