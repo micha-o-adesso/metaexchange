@@ -4,6 +4,15 @@ namespace MetaExchange.Tests.Mock;
 
 public static class MockDataCreator
 {
+    /// <summary>
+    /// Creates fake exchange data for testing purposes.
+    /// </summary>
+    /// <param name="exchangeId">The identifier of the exchange.</param>
+    /// <param name="availableCrypto">The available funds in cryptocurrency on the exchange.</param>
+    /// <param name="availableEuro">The available funds in fiat currency on the exchange.</param>
+    /// <param name="orderAmountsAndPrices">A list of tuples (first item is amount, second item is price).
+    /// Positive amounts represent Buy orders, while negative amounts represent Sell orders.</param>
+    /// <returns></returns>
     public static Exchange CreateFakeExchange(
         string exchangeId,
         decimal availableCrypto,
@@ -39,7 +48,9 @@ public static class MockDataCreator
         {
             Id = Guid.NewGuid().ToString(),
             Time = DateTime.UtcNow,
-            Type = orderAmountsAndPrices.Item1 > 0 ? OrderType.Buy : OrderType.Sell,
+            Type = orderAmountsAndPrices.Item1 > 0
+                ? OrderType.Buy   // positive amounts represent Buy orders
+                : OrderType.Sell, // negative amounts represent Sell orders
             Kind = OrderKind.Limit,
             Amount = Math.Abs(orderAmountsAndPrices.Item1),
             Price = orderAmountsAndPrices.Item2
