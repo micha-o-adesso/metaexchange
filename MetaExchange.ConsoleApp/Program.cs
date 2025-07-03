@@ -1,22 +1,27 @@
-﻿using MetaExchange.Core.Domain.BestTrade;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Cocona;
+using MetaExchange.Core.Domain.BestTrade;
 using MetaExchange.Core.Domain.Exchange.Model;
 using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 using Microsoft.Extensions.Logging;
 
-using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+CoconaApp.Run((OrderType orderType, decimal cryptoAmount, string rootFolderPath) =>
+{
+    using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+    
+    var exchangeDataProvider = new FileExchangeDataProvider(
+        rootFolderPath,
+        factory.CreateLogger<FileExchangeDataProvider>());
 
-var exchangeDataProvider = new FileExchangeDataProvider(
-    @"C:\VisualStudio\stuttgart\aufgabenstellung\exchanges",
-    factory.CreateLogger<FileExchangeDataProvider>());
-
-var bestTradeAdviser = new BestTradeAdviser(factory.CreateLogger<BestTradeAdviser>());
-
-bestTradeAdviser.LoadExchanges(exchangeDataProvider);
-var bestBuy = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 10m);
-
-bestTradeAdviser.LoadExchanges(exchangeDataProvider);
-var bestSell = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Sell, 10m);
-
-Console.WriteLine();
-
-
+    var bestTradeAdviser = new BestTradeAdviser(factory.CreateLogger<BestTradeAdviser>());
+    bestTradeAdviser.LoadExchanges(exchangeDataProvider);
+    
+    var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(orderType, cryptoAmount);
+    Console.WriteLine(JsonSerializer.Serialize(bestTrade, new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters = { new JsonStringEnumConverter() }
+    }));
+});
