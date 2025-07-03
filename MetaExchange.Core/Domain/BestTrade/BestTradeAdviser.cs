@@ -1,5 +1,6 @@
 ﻿using MetaExchange.Core.Domain.BestTrade.Model;
 using MetaExchange.Core.Domain.Exchange;
+using MetaExchange.Core.Domain.Exchange.Model;
 using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Core.Domain.BestTrade;
@@ -37,64 +38,77 @@ public class BestTradeAdviser
     /// to buy the specified amount of crypto at the lowest possible price.
     /// </summary>
     /// <param name="cryptoAmount">The amount of cryptocurrency to buy.</param>
-    public void BuyCryptoAtLowestPossiblePrice(decimal cryptoAmount)
+    public void TradeCryptoAtBestPrice(decimal cryptoAmount, OrderType orderType)
     {
-        var availableEuroByExchangeId = _exchangesById
+        var availableFundsByExchangeId = _exchangesById
             .Values
             .Select(exchange => exchange)
             .ToDictionary(
                 exchange => exchange.Id,
-                exchange => exchange.AvailableFunds.Euro);
+                exchange => orderType == OrderType.Buy
+                    ? exchange.AvailableFunds.Euro     // buy -> we have to consider our EUR funds
+                    : exchange.AvailableFunds.Crypto); // sell -> we have to consider our crypto funds
         
         // sort all orders from all exchanges by price per crypto unit (EUR/BTC)
         var orderDetails = _exchangesById
             .Values
-            .SelectMany(exchange => exchange.OrderBook.Asks
-                .Select(order => new OrderDetail(exchange.Id, order)))
-            .OrderBy(orderDetail => orderDetail.PricePerCryptoUnit)
-            .ToList();
+            .SelectMany(exchange => (orderType == OrderType.Buy
+                    ? exchange.OrderBook.Asks  // buy -> we want to buy at the lowest price, so we look at the asks
+                    : exchange.OrderBook.Bids) // sell -> we want to sell at the highest price, so we look at the bids
+                .Select(order => new OrderDetail(exchange.Id, order)));
         
-        // loop through the sorted orders and buy crypto until the specified amount is reached
-        decimal remainingAmountToBuy = cryptoAmount;
-        foreach (var orderDetail in orderDetails)
+        var orderDetailsBestFirst = orderType == OrderType.Buy
+            ? orderDetails // buy -> we want to buy at the lowest price, so we sort by ascending price
+                    .OrderBy(orderDetail => orderDetail.PricePerCryptoUnit)
+                    .ToList()
+            : orderDetails // sell -> we want to sell at the highest price, so we sort by descending price
+                .OrderByDescending(orderDetail => orderDetail.PricePerCryptoUnit)
+                .ToList();
+        
+        // loop through the sorted orders and trade crypto until the specified amount is reached
+        decimal remainingAmountToTrade = cryptoAmount;
+        foreach (var orderDetail in orderDetailsBestFirst)
         {
-            if (remainingAmountToBuy <= 0)
+            if (remainingAmountToTrade <= 0)
                 break;
 
-            // what amount can we buy from this order?
-            var amountToBuy = Math.Min(remainingAmountToBuy, orderDetail.Order.Amount);
+            // what amount can we trade from this order?
+            var amountToTrade = Math.Min(remainingAmountToTrade, orderDetail.Order.Amount);
             
-            // how much do we have to pay for this amount?
-            var priceToPay = amountToBuy * orderDetail.PricePerCryptoUnit;
+            // how much will this reduce our available funds on this exchange?
+            var fundReduction= orderType == OrderType.Buy
+                ? amountToTrade * orderDetail.PricePerCryptoUnit // buy -> reduces our EUR funds
+                : amountToTrade;                                 // sell -> reduces our crypto funds
 
-            // do we have enough EUR on this exchange?
-            //var exchange =  _exchangesById[orderDetail.ExchangeId];
-            var availableEuroOnExchange= availableEuroByExchangeId[orderDetail.ExchangeId];
-            if (priceToPay > availableEuroOnExchange)
+            // do we have enough available funds on this exchange?
+            var availableFundsOnExchange= availableFundsByExchangeId[orderDetail.ExchangeId];
+            if (fundReduction > availableFundsOnExchange)
             {
-                // not enough EUR on this exchange, so we can only buy as much as we have EUR
+                // not enough funds on this exchange, so we can only trade as much as we have
                 _logger.LogInformation("Not enough EUR on exchange {OrderDetailExchangeId} to buy {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC).",
                     orderDetail.ExchangeId,
-                    amountToBuy,
+                    amountToTrade,
                     orderDetail.Order.Price,
                     orderDetail.PricePerCryptoUnit);
                 
-                priceToPay = availableEuroOnExchange;
-                amountToBuy = priceToPay / orderDetail.PricePerCryptoUnit;
+                fundReduction = availableFundsOnExchange;
+                amountToTrade = orderType == OrderType.Buy
+                    ? fundReduction / orderDetail.PricePerCryptoUnit // buy -> we can only buy as much as we can afford
+                    : fundReduction;                                 // sell -> we can only sell as much as we have
             }
 
-            if (amountToBuy > 0)
+            if (amountToTrade > 0)
             {
-                _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToBuy, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
+                _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToTrade, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
             }
 
-            remainingAmountToBuy -= amountToBuy;
-            availableEuroByExchangeId[orderDetail.ExchangeId] -= priceToPay;
+            remainingAmountToTrade -= amountToTrade;
+            availableFundsByExchangeId[orderDetail.ExchangeId] -= fundReduction;
         }
         
-        if (remainingAmountToBuy > 0)
+        if (remainingAmountToTrade > 0)
         {
-            _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToBuy);
+            _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToTrade);
         }
         else
         {
