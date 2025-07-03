@@ -1,11 +1,14 @@
 ﻿using MetaExchange.Core;
 using MetaExchange.Core.ExchangeDataProvider.File;
+using Microsoft.Extensions.Logging;
 
-Console.WriteLine("Hello, World!");
+using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
 
-var exchangeDataProvider = new FileExchangeDataProvider(@"C:\VisualStudio\stuttgart\aufgabenstellung\exchanges");
-var orderAdviser = new OrderAdviser();
+var exchangeDataProvider = new FileExchangeDataProvider(
+    @"C:\VisualStudio\stuttgart\aufgabenstellung\exchanges",
+    factory.CreateLogger<FileExchangeDataProvider>());
+
+var orderAdviser = new OrderAdviser(factory.CreateLogger<OrderAdviser>());
 
 orderAdviser.LoadExchanges(exchangeDataProvider);
-
 orderAdviser.BuyCryptoAtLowestPossiblePrice(1000m);

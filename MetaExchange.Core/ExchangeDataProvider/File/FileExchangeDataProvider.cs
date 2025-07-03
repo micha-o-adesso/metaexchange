@@ -1,20 +1,29 @@
 ﻿using System.Text.Json;
 using MetaExchange.Core.Domain;
 using MetaExchange.Core.ExchangeDataProvider.File.Mapping;
+using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Core.ExchangeDataProvider.File;
 
-public class FileExchangeDataProvider(string rootFolderPath) : IExchangeDataProvider
+public class FileExchangeDataProvider : IExchangeDataProvider
 {
     /// <summary>
     /// The search pattern "*.json" for JSON files.
     /// </summary>
     private const string JsonFileSearchPattern = "*.json";
     
+    private readonly string _rootFolderPath;
+    private readonly ILogger<FileExchangeDataProvider> _logger;
+
+    public FileExchangeDataProvider(string rootFolderPath, ILogger<FileExchangeDataProvider> logger)
+    {
+        _rootFolderPath = rootFolderPath;
+        _logger = logger;
+    }
+    
     public IEnumerable<Exchange> GetExchanges()
     {
-        
-        foreach (var jsonFilePath in Directory.EnumerateFiles(rootFolderPath, JsonFileSearchPattern))
+        foreach (var jsonFilePath in Directory.EnumerateFiles(_rootFolderPath, JsonFileSearchPattern))
         {
             var exchange = DeserializeExchange(jsonFilePath);
             if (exchange != null)
@@ -36,7 +45,7 @@ public class FileExchangeDataProvider(string rootFolderPath) : IExchangeDataProv
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error parsing {jsonFilePath}: {e}");
+            _logger.LogInformation("Error parsing {JsonFilePath}: {Exception}", jsonFilePath, e);
             return null;
         }
     }

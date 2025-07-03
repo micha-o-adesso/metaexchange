@@ -7,7 +7,7 @@ public class OrderDetail
         ExchangeId = exchangeId;
         Order = order;
 
-        PricePerCryptoUnit = order.Price / order.Amount;
+        PricePerCryptoUnit = order.Price; // / order.Amount;
     }
     
     /// <summary>

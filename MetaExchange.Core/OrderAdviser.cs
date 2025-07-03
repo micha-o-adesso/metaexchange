@@ -1,5 +1,6 @@
 ﻿using MetaExchange.Core.Domain;
 using MetaExchange.Core.ExchangeDataProvider;
+using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Core;
 
@@ -8,7 +9,13 @@ namespace MetaExchange.Core;
 /// </summary>
 public class OrderAdviser
 {
-    private readonly Dictionary<string, Exchange> _exchangesById = new(); 
+    private readonly Dictionary<string, Exchange> _exchangesById = new();
+    private readonly ILogger<OrderAdviser> _logger;
+
+    public OrderAdviser(ILogger<OrderAdviser> logger)
+    {
+        _logger = logger;
+    }
     
     /// <summary>
     /// Loads the data of all exchanges from the specified exchange data provider.
@@ -56,7 +63,11 @@ public class OrderAdviser
             if (priceToPay > exchange.AvailableFunds.Euro)
             {
                 // not enough EUR on this exchange, so we can only buy as much as we have EUR
-                Console.WriteLine($"Not enough EUR on exchange {orderDetail.ExchangeId} to buy {amountToBuy} crypto at {orderDetail.Order.Price} (i.e. {orderDetail.PricePerCryptoUnit} EUR/BTC).");
+                _logger.LogInformation("Not enough EUR on exchange {OrderDetailExchangeId} to buy {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC)."
+                    , orderDetail.ExchangeId,
+                    amountToBuy,
+                    orderDetail.Order.Price,
+                    orderDetail.PricePerCryptoUnit);
                 
                 priceToPay = exchange.AvailableFunds.Euro;
                 amountToBuy = priceToPay / orderDetail.PricePerCryptoUnit;
@@ -64,7 +75,7 @@ public class OrderAdviser
 
             if (amountToBuy > 0)
             {
-                Console.WriteLine($"Buying {amountToBuy} crypto at {orderDetail.Order.Price} (i.e. {orderDetail.PricePerCryptoUnit} EUR/BTC) on exchange {orderDetail.ExchangeId}");
+                _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToBuy, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
             }
 
             remainingAmountToBuy -= amountToBuy;
@@ -73,11 +84,11 @@ public class OrderAdviser
         
         if (remainingAmountToBuy > 0)
         {
-            Console.WriteLine($"Could not buy the full amount of {cryptoAmount} crypto. Remaining amount to buy: {remainingAmountToBuy}");
+            _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToBuy);
         }
         else
         {
-            Console.WriteLine("Bought the full amount of crypto successfully.");
+            _logger.LogInformation("Bought the full amount of crypto successfully.");
         }
     }
 }
