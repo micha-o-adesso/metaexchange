@@ -7,3 +7,5 @@ var exchangeDataProvider = new FileExchangeDataProvider(@"C:\VisualStudio\stuttg
 var orderAdviser = new OrderAdviser();
 
 orderAdviser.LoadExchanges(exchangeDataProvider);
+
+orderAdviser.BuyCryptoAtLowestPossiblePrice(100m);
