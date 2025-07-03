@@ -1,7 +1,7 @@
 ﻿using MetaExchange.Core.Domain.Exchange;
 using MetaExchange.Core.Domain.Exchange.Model;
 
-namespace MetaExchange.Tests;
+namespace MetaExchange.Tests.Mock;
 
 /// <summary>
 /// A mock implementation of the IExchangeDataProvider interface for testing purposes.

@@ -1,5 +1,6 @@
 ﻿using MetaExchange.Core.Domain.BestTrade;
 using MetaExchange.Core.Domain.Exchange.Model;
+using MetaExchange.Tests.Mock;
 using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Tests;
@@ -38,7 +39,7 @@ public class BestTradeAdviserTests
     {
         BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory.CreateLogger<BestTradeAdviser>());
         MockExchangeDataProvider exchangeDataProvider = new MockExchangeDataProvider([
-            CreateFakeExchange(
+            MockDataCreator.CreateFakeExchange(
                 "exchange1", 10m, 100000m,
                 new List<Tuple<decimal, decimal>>
                 {
@@ -90,50 +91,4 @@ public class BestTradeAdviserTests
         bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Sell, 4m);
         Assert.That(bestTrade, Is.Null);
     }
-
-    #region Fake data creation
-
-    private static Exchange CreateFakeExchange(
-        string exchangeId,
-        decimal availableCrypto,
-        decimal availableEuro,
-        IList<Tuple<decimal, decimal>> orderAmountsAndPrices)
-    {
-        return new Exchange
-        {
-            Id = exchangeId,
-            AvailableFunds = new()
-            {
-                Crypto = availableCrypto,
-                Euro = availableEuro
-            },
-            OrderBook = new()
-            {
-                Bids = orderAmountsAndPrices
-                    .Select(CreateFakeOrder)
-                    .Where(order => order.Type == OrderType.Buy)
-                    .ToList(),
-                
-                Asks = orderAmountsAndPrices
-                    .Select(CreateFakeOrder)
-                    .Where(order => order.Type == OrderType.Sell)
-                    .ToList()
-            }
-        };
-    }
-
-    private static Order CreateFakeOrder(Tuple<decimal, decimal> orderAmountsAndPrices)
-    {
-        return new Order
-        {
-            Id = Guid.NewGuid().ToString(),
-            Time = DateTime.UtcNow,
-            Type = orderAmountsAndPrices.Item1 > 0 ? OrderType.Buy : OrderType.Sell,
-            Kind = OrderKind.Limit,
-            Amount = Math.Abs(orderAmountsAndPrices.Item1),
-            Price = orderAmountsAndPrices.Item2
-        };
-    }
-    
-    #endregion
 }
