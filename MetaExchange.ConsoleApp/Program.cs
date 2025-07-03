@@ -1,4 +1,4 @@
-﻿using MetaExchange.Core;
+﻿using MetaExchange.Core.Domain.BestTrade;
 using MetaExchange.Core.ExchangeDataProvider.File;
 using Microsoft.Extensions.Logging;
 
@@ -8,7 +8,7 @@ var exchangeDataProvider = new FileExchangeDataProvider(
     @"C:\VisualStudio\stuttgart\aufgabenstellung\exchanges",
     factory.CreateLogger<FileExchangeDataProvider>());
 
-var orderAdviser = new OrderAdviser(factory.CreateLogger<OrderAdviser>());
+var bestTradeAdviser = new BestTradeAdviser(factory.CreateLogger<BestTradeAdviser>());
 
-orderAdviser.LoadExchanges(exchangeDataProvider);
-orderAdviser.BuyCryptoAtLowestPossiblePrice(1000m);
+bestTradeAdviser.LoadExchanges(exchangeDataProvider);
+bestTradeAdviser.BuyCryptoAtLowestPossiblePrice(1000m);

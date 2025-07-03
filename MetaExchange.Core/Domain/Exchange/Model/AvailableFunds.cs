@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain;
+﻿namespace MetaExchange.Core.Domain.Exchange.Model;
 
 /// <summary>
 /// The available funds on an exchange.

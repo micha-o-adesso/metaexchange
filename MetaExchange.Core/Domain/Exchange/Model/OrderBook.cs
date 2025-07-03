@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain;
+﻿namespace MetaExchange.Core.Domain.Exchange.Model;
 
 /// <summary>
 /// The order book represents the current state of buy and sell orders on an exchange.

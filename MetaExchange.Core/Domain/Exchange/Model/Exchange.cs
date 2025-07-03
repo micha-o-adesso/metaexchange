@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain;
+﻿namespace MetaExchange.Core.Domain.Exchange.Model;
 
 /// <summary>
 /// The exchange represents a trading platform where users can buy and sell cryptocurrencies.

@@ -1,18 +1,20 @@
-﻿using MetaExchange.Core.Domain;
+﻿using MetaExchange.Core.Domain.BestTrade.Model;
 using MetaExchange.Core.ExchangeDataProvider;
 using Microsoft.Extensions.Logging;
 
-namespace MetaExchange.Core;
+namespace MetaExchange.Core.Domain.BestTrade;
 
 /// <summary>
-/// The order adviser is the main component of MetaExchange's core functionality. 
+/// The best trade adviser is the main component of MetaExchange's core functionality.
+/// It analyzes the order books of all exchanges and outputs a set of orders to execute against them
+/// in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.
 /// </summary>
-public class OrderAdviser
+public class BestTradeAdviser
 {
-    private readonly Dictionary<string, Exchange> _exchangesById = new();
-    private readonly ILogger<OrderAdviser> _logger;
+    private readonly Dictionary<string, Exchange.Model.Exchange> _exchangesById = new();
+    private readonly ILogger<BestTradeAdviser> _logger;
 
-    public OrderAdviser(ILogger<OrderAdviser> logger)
+    public BestTradeAdviser(ILogger<BestTradeAdviser> logger)
     {
         _logger = logger;
     }

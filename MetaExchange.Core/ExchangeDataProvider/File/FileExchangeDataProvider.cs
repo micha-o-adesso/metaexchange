@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using MetaExchange.Core.Domain;
+using MetaExchange.Core.Domain.Exchange.Model;
 using MetaExchange.Core.ExchangeDataProvider.File.Mapping;
 using Microsoft.Extensions.Logging;
 

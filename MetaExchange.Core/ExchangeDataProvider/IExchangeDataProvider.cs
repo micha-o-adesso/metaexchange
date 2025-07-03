@@ -1,4 +1,4 @@
-﻿using MetaExchange.Core.Domain;
+﻿using MetaExchange.Core.Domain.Exchange.Model;
 
 namespace MetaExchange.Core.ExchangeDataProvider;
 

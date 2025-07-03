@@ -1,4 +1,6 @@
-﻿namespace MetaExchange.Core.Domain;
+﻿using MetaExchange.Core.Domain.Exchange.Model;
+
+namespace MetaExchange.Core.Domain.BestTrade.Model;
 
 public class OrderDetail
 {
