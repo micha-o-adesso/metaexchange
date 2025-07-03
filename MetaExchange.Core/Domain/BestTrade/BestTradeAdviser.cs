@@ -35,32 +35,32 @@ public class BestTradeAdviser
     }
 
     /// <summary>
-    /// Outputs a set of orders to execute against the order books of all exchanges
-    /// to buy the specified amount of crypto at the lowest possible price.
+    /// Outputs a set of orders to execute against these order books in order to buy/sell
+    /// the specified amount of cryptocurrency at the lowest/highest possible price.
     /// </summary>
-    /// <param name="cryptoAmount">The amount of cryptocurrency to buy.</param>
-    public Model.BestTrade? TradeCryptoAtBestPrice(decimal cryptoAmount, OrderType orderType)
+    /// <param name="tradeType">The type of the trade (i.e. Buy or Sell).</param>
+    /// <param name="cryptoAmount">The amount of cryptocurrency to trade.</param>
+    public Model.BestTrade? TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
         Model.BestTrade bestTrade = new Model.BestTrade();
         
         var availableFundsByExchangeId = _exchangesById
             .Values
-            .Select(exchange => exchange)
             .ToDictionary(
                 exchange => exchange.Id,
-                exchange => orderType == OrderType.Buy
+                exchange => tradeType == OrderType.Buy
                     ? exchange.AvailableFunds.Euro     // buy -> we have to consider our EUR funds
                     : exchange.AvailableFunds.Crypto); // sell -> we have to consider our crypto funds
         
         // sort all orders from all exchanges by price per crypto unit (EUR/BTC)
         var orderDetails = _exchangesById
             .Values
-            .SelectMany(exchange => (orderType == OrderType.Buy
+            .SelectMany(exchange => (tradeType == OrderType.Buy
                     ? exchange.OrderBook.Asks  // buy -> we want to buy at the lowest price, so we look at the asks
                     : exchange.OrderBook.Bids) // sell -> we want to sell at the highest price, so we look at the bids
                 .Select(order => new OrderDetail(exchange.Id, order)));
         
-        var orderDetailsBestFirst = orderType == OrderType.Buy
+        var orderDetailsBestFirst = tradeType == OrderType.Buy
             ? orderDetails // buy -> we want to buy at the lowest price, so we sort by ascending price
                     .OrderBy(orderDetail => orderDetail.PricePerCryptoUnit)
                     .ToList()
@@ -79,7 +79,7 @@ public class BestTradeAdviser
             var amountToTrade = Math.Min(remainingAmountToTrade, orderDetail.Order.Amount);
             
             // how much will this reduce our available funds on this exchange?
-            var fundReduction= orderType == OrderType.Buy
+            var fundReduction= tradeType == OrderType.Buy
                 ? amountToTrade * orderDetail.PricePerCryptoUnit // buy -> reduces our EUR funds
                 : amountToTrade;                                 // sell -> reduces our crypto funds
 
@@ -95,7 +95,7 @@ public class BestTradeAdviser
                     orderDetail.PricePerCryptoUnit);
                 
                 fundReduction = availableFundsOnExchange;
-                amountToTrade = orderType == OrderType.Buy
+                amountToTrade = tradeType == OrderType.Buy
                     ? fundReduction / orderDetail.PricePerCryptoUnit // buy -> we can only buy as much as we can afford
                     : fundReduction;                                 // sell -> we can only sell as much as we have
             }
@@ -105,8 +105,7 @@ public class BestTradeAdviser
                 _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToTrade, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
                 bestTrade.RecommendedOrders.Add(new OrderRecommendation
                 {
-                    Type = orderType,
-                    Kind = OrderKind.Limit,
+                    Type = tradeType,
                     Price = orderDetail.PricePerCryptoUnit,
                     Amount = amountToTrade,
                     ExchangeId = orderDetail.ExchangeId
@@ -124,10 +123,8 @@ public class BestTradeAdviser
             _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToTrade);
             return null;
         }
-        else
-        {
-            _logger.LogInformation("Bought the full amount of crypto successfully.");
-            return bestTrade;
-        }
+
+        _logger.LogInformation("Bought the full amount of crypto successfully.");
+        return bestTrade;
     }
 }

@@ -10,11 +10,6 @@ public class OrderRecommendation
     public required OrderType Type { get; init; }
 
     /// <summary>
-    /// The kind of the order (e.g. "Market", "Limit").
-    /// </summary>
-    public required OrderKind Kind { get; init; }
-
-    /// <summary>
     /// The amount of cryptocurrency to buy or sell (e.g. 0.01).
     /// </summary>
     public required decimal Amount { get; init; }
