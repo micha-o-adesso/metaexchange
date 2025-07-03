@@ -5,5 +5,8 @@ namespace MetaExchange.Core.Domain.Exchange.Model;
 /// </summary>
 public enum OrderKind
 {
+    /// <summary>
+    /// A limit order is an order to buy or sell a security at a specified price or better.
+    /// </summary>
     Limit
 }

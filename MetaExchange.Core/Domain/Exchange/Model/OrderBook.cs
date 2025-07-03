@@ -8,10 +8,10 @@ public class OrderBook
     /// <summary>
     /// The buy orders in the order book.
     /// </summary>
-    public List<Order> Bids { get; set; } = [];
+    public List<Order> Bids { get; init; } = [];
     
     /// <summary>
     /// The sell orders in the order book.
     /// </summary>
-    public List<Order> Asks { get; set; } = [];
+    public List<Order> Asks { get; init; } = [];
 }
