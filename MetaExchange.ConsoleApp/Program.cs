@@ -8,4 +8,4 @@ var orderAdviser = new OrderAdviser();
 
 orderAdviser.LoadExchanges(exchangeDataProvider);
 
-orderAdviser.BuyCryptoAtLowestPossiblePrice(100m);
+orderAdviser.BuyCryptoAtLowestPossiblePrice(1000m);
