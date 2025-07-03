@@ -1,9 +1,10 @@
 ﻿using System.Text.Json;
+using MetaExchange.Core.Domain.Exchange;
 using MetaExchange.Core.Domain.Exchange.Model;
-using MetaExchange.Core.ExchangeDataProvider.File.Mapping;
+using MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Mapping;
 using Microsoft.Extensions.Logging;
 
-namespace MetaExchange.Core.ExchangeDataProvider.File;
+namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 
 public class FileExchangeDataProvider : IExchangeDataProvider
 {
@@ -31,12 +32,12 @@ public class FileExchangeDataProvider : IExchangeDataProvider
         }
     }
     
-    private File.Model.Exchange? DeserializeExchange(string jsonFilePath)
+    private Infrastructure.FileExchangeDataProvider.Model.Exchange? DeserializeExchange(string jsonFilePath)
     {
         try
         {
             using var fileStream = System.IO.File.OpenRead(jsonFilePath);
-            var exchange = JsonSerializer.Deserialize<ExchangeDataProvider.File.Model.Exchange>(fileStream, new JsonSerializerOptions
+            var exchange = JsonSerializer.Deserialize<Infrastructure.FileExchangeDataProvider.Model.Exchange>(fileStream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 AllowTrailingCommas = true

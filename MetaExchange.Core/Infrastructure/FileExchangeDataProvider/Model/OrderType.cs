@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace MetaExchange.Core.ExchangeDataProvider.File.Model;
+namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Model;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum OrderType

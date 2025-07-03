@@ -1,7 +1,6 @@
-﻿using MetaExchange.Core.Domain;
-using MetaExchange.Core.Domain.Exchange.Model;
+﻿using MetaExchange.Core.Domain.Exchange.Model;
 
-namespace MetaExchange.Core.ExchangeDataProvider.File.Mapping;
+namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Mapping;
 
 public static class ModelToDomainMapper
 {

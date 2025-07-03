@@ -1,5 +1,5 @@
 ﻿using MetaExchange.Core.Domain.BestTrade.Model;
-using MetaExchange.Core.ExchangeDataProvider;
+using MetaExchange.Core.Domain.Exchange;
 using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Core.Domain.BestTrade;

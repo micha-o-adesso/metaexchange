@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.ExchangeDataProvider.File.Model;
+﻿namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The order represents a buy or sell transaction for a cryptocurrency on an exchange.

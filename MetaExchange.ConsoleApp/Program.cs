@@ -1,5 +1,5 @@
 ﻿using MetaExchange.Core.Domain.BestTrade;
-using MetaExchange.Core.ExchangeDataProvider.File;
+using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 using Microsoft.Extensions.Logging;
 
 using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());

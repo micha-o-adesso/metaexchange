@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.ExchangeDataProvider.File.Model;
+﻿namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The available funds on an exchange.
