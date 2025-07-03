@@ -7,8 +7,9 @@ namespace MetaExchange.Core.Domain.BestTrade;
 
 /// <summary>
 /// The best trade adviser is the main component of MetaExchange's core functionality.
-/// It analyzes the order books of all exchanges and outputs a set of orders to execute against them
-/// in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.
+/// It analyzes the order books of all exchanges and outputs a set of orders to
+/// execute against these order books in order to buy/sell the specified
+/// amount of cryptocurrency at the lowest/highest possible price.
 /// </summary>
 public class BestTradeAdviser
 {
@@ -38,8 +39,10 @@ public class BestTradeAdviser
     /// to buy the specified amount of crypto at the lowest possible price.
     /// </summary>
     /// <param name="cryptoAmount">The amount of cryptocurrency to buy.</param>
-    public void TradeCryptoAtBestPrice(decimal cryptoAmount, OrderType orderType)
+    public Model.BestTrade? TradeCryptoAtBestPrice(decimal cryptoAmount, OrderType orderType)
     {
+        Model.BestTrade bestTrade = new Model.BestTrade();
+        
         var availableFundsByExchangeId = _exchangesById
             .Values
             .Select(exchange => exchange)
@@ -100,6 +103,16 @@ public class BestTradeAdviser
             if (amountToTrade > 0)
             {
                 _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToTrade, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
+                bestTrade.RecommendedOrders.Add(new OrderRecommendation
+                {
+                    Type = orderType,
+                    Kind = OrderKind.Limit,
+                    Price = orderDetail.PricePerCryptoUnit,
+                    Amount = amountToTrade,
+                    ExchangeId = orderDetail.ExchangeId
+                });
+                bestTrade.TotalAmount += amountToTrade;
+                bestTrade.TotalPrice += amountToTrade * orderDetail.PricePerCryptoUnit;
             }
 
             remainingAmountToTrade -= amountToTrade;
@@ -109,10 +122,12 @@ public class BestTradeAdviser
         if (remainingAmountToTrade > 0)
         {
             _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToTrade);
+            return null;
         }
         else
         {
             _logger.LogInformation("Bought the full amount of crypto successfully.");
+            return bestTrade;
         }
     }
 }

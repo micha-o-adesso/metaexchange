@@ -12,4 +12,11 @@ var exchangeDataProvider = new FileExchangeDataProvider(
 var bestTradeAdviser = new BestTradeAdviser(factory.CreateLogger<BestTradeAdviser>());
 
 bestTradeAdviser.LoadExchanges(exchangeDataProvider);
-bestTradeAdviser.TradeCryptoAtBestPrice(1000m, OrderType.Buy);
+var bestBuy = bestTradeAdviser.TradeCryptoAtBestPrice(10m, OrderType.Buy);
+
+bestTradeAdviser.LoadExchanges(exchangeDataProvider);
+var bestSell = bestTradeAdviser.TradeCryptoAtBestPrice(10m, OrderType.Sell);
+
+Console.WriteLine();
+
+
