@@ -37,6 +37,13 @@ public class OrderAdviser
     /// <param name="cryptoAmount">The amount of cryptocurrency to buy.</param>
     public void BuyCryptoAtLowestPossiblePrice(decimal cryptoAmount)
     {
+        var availableEuroByExchangeId = _exchangesById
+            .Values
+            .Select(exchange => exchange)
+            .ToDictionary(
+                exchange => exchange.Id,
+                exchange => exchange.AvailableFunds.Euro);
+        
         // sort all orders from all exchanges by price per crypto unit (EUR/BTC)
         var orderDetails = _exchangesById
             .Values
@@ -59,17 +66,18 @@ public class OrderAdviser
             var priceToPay = amountToBuy * orderDetail.PricePerCryptoUnit;
 
             // do we have enough EUR on this exchange?
-            var exchange = _exchangesById[orderDetail.ExchangeId];
-            if (priceToPay > exchange.AvailableFunds.Euro)
+            //var exchange =  _exchangesById[orderDetail.ExchangeId];
+            var availableEuroOnExchange= availableEuroByExchangeId[orderDetail.ExchangeId];
+            if (priceToPay > availableEuroOnExchange)
             {
                 // not enough EUR on this exchange, so we can only buy as much as we have EUR
-                _logger.LogInformation("Not enough EUR on exchange {OrderDetailExchangeId} to buy {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC)."
-                    , orderDetail.ExchangeId,
+                _logger.LogInformation("Not enough EUR on exchange {OrderDetailExchangeId} to buy {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC).",
+                    orderDetail.ExchangeId,
                     amountToBuy,
                     orderDetail.Order.Price,
                     orderDetail.PricePerCryptoUnit);
                 
-                priceToPay = exchange.AvailableFunds.Euro;
+                priceToPay = availableEuroOnExchange;
                 amountToBuy = priceToPay / orderDetail.PricePerCryptoUnit;
             }
 
@@ -79,7 +87,7 @@ public class OrderAdviser
             }
 
             remainingAmountToBuy -= amountToBuy;
-            exchange.AvailableFunds.Euro -= priceToPay;
+            availableEuroByExchangeId[orderDetail.ExchangeId] -= priceToPay;
         }
         
         if (remainingAmountToBuy > 0)
