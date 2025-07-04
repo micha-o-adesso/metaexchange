@@ -8,7 +8,9 @@ using Microsoft.Extensions.Logging;
 
 CoconaApp.Run((OrderType orderType, decimal cryptoAmount, string rootFolderPath) =>
 {
-    using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+    using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder
+        .AddFilter(l => l > LogLevel.Information)
+        .AddConsole());
     
     var exchangeDataProvider = new FileExchangeDataProvider(rootFolderPath, loggerFactory);
     var bestTradeAdviser = new BestTradeAdviser(loggerFactory);
