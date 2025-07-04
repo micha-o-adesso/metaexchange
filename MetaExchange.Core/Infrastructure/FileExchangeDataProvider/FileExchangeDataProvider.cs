@@ -36,7 +36,7 @@ public class FileExchangeDataProvider : IExchangeDataProvider
     {
         try
         {
-            using var fileStream = System.IO.File.OpenRead(jsonFilePath);
+            using var fileStream = File.OpenRead(jsonFilePath);
             var exchange = JsonSerializer.Deserialize<Infrastructure.FileExchangeDataProvider.Model.Exchange>(fileStream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -46,7 +46,7 @@ public class FileExchangeDataProvider : IExchangeDataProvider
         }
         catch (Exception e)
         {
-            _logger.LogInformation("Error parsing {JsonFilePath}: {Exception}", jsonFilePath, e);
+            _logger.LogError("Could not parse {JsonFilePath}: {Exception}", jsonFilePath, e);
             return null;
         }
     }

@@ -25,12 +25,12 @@ public class BestTrade
     /// <summary>
     /// The average price per unit of the trade, calculated as TotalPrice divided by TotalAmount.
     /// </summary>
-    public decimal? AveragePricePerUnit => TotalAmount == 0
+    public decimal? AveragePricePerUnit => TotalAmount == 0m
         ? null
         : TotalPrice / TotalAmount;
 
     /// <summary>
     /// A flag indicating whether the full amount of cryptocurrency has been traded.
     /// </summary>
-    public bool IsFullAmountTraded => RemainingAmountToTrade == 0;
+    public bool IsFullAmountTraded => RemainingAmountToTrade <= 0m;
 }

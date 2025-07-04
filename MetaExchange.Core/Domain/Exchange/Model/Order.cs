@@ -16,12 +16,12 @@ public class Order
     public required DateTime Time { get; init; }
 
     /// <summary>
-    /// The type of the order (e.g. "Buy", "Sell").
+    /// The type of the order (i.e. "Buy", "Sell").
     /// </summary>
     public required OrderType Type { get; init; }
 
     /// <summary>
-    /// The kind of the order (e.g. "Market", "Limit").
+    /// The kind of the order (e.g. "Limit").
     /// </summary>
     public required OrderKind Kind { get; init; }
 
@@ -31,7 +31,7 @@ public class Order
     public required decimal Amount { get; init; }
 
     /// <summary>
-    /// The price at which to buy or sell the cryptocurrency (e.g. 57226.46).
+    /// The price at which to buy or sell a unit of the cryptocurrency (e.g. 57226.46).
     /// </summary>
     public required decimal Price { get; init; }
 }

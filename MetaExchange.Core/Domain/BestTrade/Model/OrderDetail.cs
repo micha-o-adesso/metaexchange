@@ -8,8 +8,6 @@ public class OrderDetail
     {
         ExchangeId = exchangeId;
         Order = order;
-
-        PricePerCryptoUnit = order.Price; // / order.Amount;
     }
     
     /// <summary>
@@ -21,10 +19,4 @@ public class OrderDetail
     /// The order.
     /// </summary>
     public Order Order { get; private set; }
-    
-    /// <summary>
-    /// The price per cryptocurrency unit in the order.
-    /// Example: if the order is to buy 0.5 BTC at a price of 57226.08 EUR, then PricePerCrypto will be 114452.16 EUR.
-    /// </summary>
-    public decimal PricePerCryptoUnit { get; private set; }
 }
