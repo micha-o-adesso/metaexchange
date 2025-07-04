@@ -10,12 +10,17 @@ public class BestTrade
     /// <summary>
     /// The total amount of the trade, which is the sum of all order amounts in the trade.
     /// </summary>
-    public decimal TotalAmount { get; set; }
+    public decimal TotalAmount { get; init; }
     
     /// <summary>
     /// The total price of the trade, which is the sum of all order prices in the trade.
     /// </summary>
-    public decimal TotalPrice { get; set; }
+    public decimal TotalPrice { get; init; }
+    
+    /// <summary>
+    /// The remaining amount of cryptocurrency that could not be traded due to insufficient orders.
+    /// </summary>
+    public decimal RemainingAmountToTrade { get; init; }
     
     /// <summary>
     /// The average price per unit of the trade, calculated as TotalPrice divided by TotalAmount.
@@ -23,4 +28,9 @@ public class BestTrade
     public decimal? AveragePricePerUnit => TotalAmount == 0
         ? null
         : TotalPrice / TotalAmount;
+
+    /// <summary>
+    /// A flag indicating whether the full amount of cryptocurrency has been traded.
+    /// </summary>
+    public bool IsFullAmountTraded => RemainingAmountToTrade == 0;
 }

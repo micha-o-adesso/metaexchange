@@ -40,9 +40,12 @@ public class BestTradeAdviser
     /// </summary>
     /// <param name="tradeType">The type of the trade (i.e. Buy or Sell).</param>
     /// <param name="cryptoAmount">The amount of cryptocurrency to trade.</param>
-    public Model.BestTrade? TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
+    public Model.BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
-        Model.BestTrade bestTrade = new Model.BestTrade();
+        Model.BestTrade bestTrade = new Model.BestTrade
+        {
+            RemainingAmountToTrade = cryptoAmount
+        };
         
         var availableFundsByExchangeId = _exchangesById
             .Values
@@ -69,14 +72,14 @@ public class BestTradeAdviser
                 .ToList();
         
         // loop through the sorted orders and trade crypto until the specified amount is reached
-        decimal remainingAmountToTrade = cryptoAmount;
+        //decimal remainingAmountToTrade = cryptoAmount;
         foreach (var orderDetail in orderDetailsBestFirst)
         {
-            if (remainingAmountToTrade <= 0)
+            if (bestTrade.RemainingAmountToTrade <= 0)
                 break;
 
             // what amount can we trade from this order?
-            var amountToTrade = Math.Min(remainingAmountToTrade, orderDetail.Order.Amount);
+            var amountToTrade = Math.Min(bestTrade.RemainingAmountToTrade, orderDetail.Order.Amount);
             
             // how much will this reduce our available funds on this exchange?
             var fundReduction= tradeType == OrderType.Buy
@@ -103,28 +106,37 @@ public class BestTradeAdviser
             if (amountToTrade > 0)
             {
                 _logger.LogInformation("Buying {AmountToBuy} crypto at {OrderPrice} (i.e. {OrderDetailPricePerCryptoUnit} EUR/BTC) on exchange {OrderDetailExchangeId}", amountToTrade, orderDetail.Order.Price, orderDetail.PricePerCryptoUnit, orderDetail.ExchangeId);
-                bestTrade.RecommendedOrders.Add(new OrderRecommendation
-                {
-                    Type = tradeType,
-                    Price = orderDetail.PricePerCryptoUnit,
-                    Amount = amountToTrade,
-                    ExchangeId = orderDetail.ExchangeId
-                });
-                bestTrade.TotalAmount += amountToTrade;
-                bestTrade.TotalPrice += amountToTrade * orderDetail.PricePerCryptoUnit;
-            }
+                
+                availableFundsByExchangeId[orderDetail.ExchangeId] -= fundReduction;
 
-            remainingAmountToTrade -= amountToTrade;
-            availableFundsByExchangeId[orderDetail.ExchangeId] -= fundReduction;
+                bestTrade = new Model.BestTrade
+                {
+                    RecommendedOrders = bestTrade.RecommendedOrders
+                        .Append(new OrderRecommendation
+                        {
+                            Type = tradeType,
+                            Price = orderDetail.PricePerCryptoUnit,
+                            Amount = amountToTrade,
+                            ExchangeId = orderDetail.ExchangeId
+                        })
+                        .ToList(),
+                    TotalAmount = bestTrade.TotalAmount + amountToTrade,
+                    TotalPrice = bestTrade.TotalPrice + amountToTrade * orderDetail.PricePerCryptoUnit,
+                    RemainingAmountToTrade = bestTrade.RemainingAmountToTrade - amountToTrade
+                };
+            }
         }
         
-        if (remainingAmountToTrade > 0)
+        if (bestTrade.RemainingAmountToTrade > 0)
         {
-            _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, remainingAmountToTrade);
-            return null;
+            _logger.LogInformation("Could not buy the full amount of {CryptoAmount} crypto. Remaining amount to buy: {RemainingAmountToBuy}", cryptoAmount, bestTrade.RemainingAmountToTrade);
+            
+        }
+        else
+        {
+            _logger.LogInformation("Bought the full amount of crypto successfully.");
         }
 
-        _logger.LogInformation("Bought the full amount of crypto successfully.");
         return bestTrade;
     }
 }
