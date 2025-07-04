@@ -11,7 +11,7 @@ public static class MockDataCreator
     /// <param name="availableCrypto">The available funds in cryptocurrency on the exchange.</param>
     /// <param name="availableEuro">The available funds in fiat currency on the exchange.</param>
     /// <param name="orderAmountsAndPrices">A list of tuples (first item is amount, second item is price).
-    /// Positive amounts represent Buy orders, while negative amounts represent Sell orders.</param>
+    /// Positive amounts represent buy orders, while negative amounts represent sell orders.</param>
     /// <returns></returns>
     public static Exchange CreateFakeExchange(
         string exchangeId,
@@ -49,8 +49,8 @@ public static class MockDataCreator
             Id = Guid.NewGuid().ToString(),
             Time = DateTime.UtcNow,
             Type = orderAmountsAndPrices.Item1 > 0
-                ? OrderType.Buy   // positive amounts represent Buy orders
-                : OrderType.Sell, // negative amounts represent Sell orders
+                ? OrderType.Buy   // positive amounts represent buy orders
+                : OrderType.Sell, // negative amounts represent sell orders
             Kind = OrderKind.Limit,
             CryptoAmount = Math.Abs(orderAmountsAndPrices.Item1),
             PricePerCryptoUnit = orderAmountsAndPrices.Item2

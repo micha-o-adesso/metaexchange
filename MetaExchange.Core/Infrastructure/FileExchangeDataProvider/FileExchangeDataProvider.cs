@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 
+/// <summary>
+/// An exchange data provider that reads exchange data from JSON files in a specified directory.
+/// </summary>
 public class FileExchangeDataProvider : IExchangeDataProvider
 {
     /// <summary>

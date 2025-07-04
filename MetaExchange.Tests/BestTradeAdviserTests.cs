@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace MetaExchange.Tests;
 
+/// <summary>
+/// A set of tests for the BestTradeAdviser class.
+/// </summary>
 public class BestTradeAdviserTests
 {
     private ILoggerFactory _loggerFactory; 

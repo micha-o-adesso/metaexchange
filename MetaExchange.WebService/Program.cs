@@ -38,6 +38,7 @@ var bestTradeHandler = app.Services.GetRequiredService<BestTradeHandler>();
 app
     .MapGet("/besttrade", bestTradeHandler.TradeCryptoAtBestPrice)
     .WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.")
-    .Produces<BestTrade>();
+    .Produces<BestTrade>()
+    .Produces(StatusCodes.Status400BadRequest);
 
 app.Run();

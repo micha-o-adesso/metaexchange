@@ -64,7 +64,7 @@ public class BestTradeAdviser
                     : exchange.AvailableFunds.Crypto); // sell -> we have to consider our available amount of cryptocurrency
         
         // depending on the trade type, we need to get the order book's asks (for buying) or bids (for selling)
-        var orderDetails = _exchangesById
+        var exchangeOrders = _exchangesById
             .Values
             .SelectMany(exchange => (tradeType == OrderType.Buy
                     ? exchange.OrderBook.Asks  // buy -> we want to buy at the lowest price, so we look at the asks
@@ -72,51 +72,51 @@ public class BestTradeAdviser
                 .Select(order => new ExchangeOrder(exchange.Id, order)));
         
         // sort all orders from all exchanges by price per crypto unit (EUR/BTC)
-        var orderDetailsBestFirst = tradeType == OrderType.Buy
-            ? orderDetails // buy -> we want to buy at the lowest price, so we sort by ascending price
-                    .OrderBy(orderDetail => orderDetail.Order.PricePerCryptoUnit)
+        var exchangeOrdersBestFirst = tradeType == OrderType.Buy
+            ? exchangeOrders // buy -> we want to buy at the lowest price, so we sort by ascending price
+                    .OrderBy(exchangeOrder => exchangeOrder.Order.PricePerCryptoUnit)
                     .ToList()
-            : orderDetails // sell -> we want to sell at the highest price, so we sort by descending price
-                .OrderByDescending(orderDetail => orderDetail.Order.PricePerCryptoUnit)
+            : exchangeOrders // sell -> we want to sell at the highest price, so we sort by descending price
+                .OrderByDescending(exchangeOrder => exchangeOrder.Order.PricePerCryptoUnit)
                 .ToList();
         
         // loop through the sorted orders and trade crypto until the specified amount is reached
-        foreach (var orderDetail in orderDetailsBestFirst)
+        foreach (var exchangeOrder in exchangeOrdersBestFirst)
         {
             if (bestTrade.RemainingAmountToTrade <= 0)
                 break;
 
             // what amount can we trade from this order?
-            var amountToTrade = Math.Min(bestTrade.RemainingAmountToTrade, orderDetail.Order.CryptoAmount);
+            var amountToTrade = Math.Min(bestTrade.RemainingAmountToTrade, exchangeOrder.Order.CryptoAmount);
             
             // how much will this reduce our available funds on this exchange?
             var fundReduction= tradeType == OrderType.Buy
-                ? amountToTrade * orderDetail.Order.PricePerCryptoUnit // buy -> reduces our available amount of Euro
-                : amountToTrade;                                       // sell -> reduces our available amount of cryptocurrency
+                ? amountToTrade * exchangeOrder.Order.PricePerCryptoUnit // buy -> reduces our available amount of Euro
+                : amountToTrade;                                         // sell -> reduces our available amount of cryptocurrency
 
             // do we have enough available funds on this exchange?
-            var availableFundsOnExchange= availableFundsByExchangeId[orderDetail.ExchangeId];
+            var availableFundsOnExchange= availableFundsByExchangeId[exchangeOrder.ExchangeId];
             if (fundReduction > availableFundsOnExchange)
             {
                 // not enough funds on this exchange, so we can only trade as much as we have
                 _logger.LogInformation(
-                    "Not enough funds on exchange '{OrderDetailExchangeId}' to trade {AmountToTrade} crypto at {OrderDetailOrderPricePerCryptoUnit} EUR/BTC.",
-                    orderDetail.ExchangeId, amountToTrade, orderDetail.Order.PricePerCryptoUnit);
+                    "Not enough funds on exchange '{ExchangeOrderExchangeId}' to trade {AmountToTrade} crypto at {ExchangeOrderOrderPricePerCryptoUnit} EUR/BTC.",
+                    exchangeOrder.ExchangeId, amountToTrade, exchangeOrder.Order.PricePerCryptoUnit);
                 
                 fundReduction = availableFundsOnExchange;
                 amountToTrade = tradeType == OrderType.Buy
-                    ? fundReduction / orderDetail.Order.PricePerCryptoUnit // buy -> buy as much as we can afford
-                    : fundReduction;                                       // sell -> sell as much as we have
+                    ? fundReduction / exchangeOrder.Order.PricePerCryptoUnit // buy -> buy as much as we can afford
+                    : fundReduction;                                         // sell -> sell as much as we have
             }
 
             if (amountToTrade > 0)
             {
                 _logger.LogInformation(
-                    "Trading {AmountToBuy} crypto at {OrderDetailOrderPricePerCryptoUnit} on exchange '{OrderDetailExchangeId}'.",
-                    amountToTrade, orderDetail.Order.PricePerCryptoUnit, orderDetail.ExchangeId);
+                    "Trading {AmountToBuy} crypto at {ExchangeOrderOrderPricePerCryptoUnit} on exchange '{ExchangeOrderExchangeId}'.",
+                    amountToTrade, exchangeOrder.Order.PricePerCryptoUnit, exchangeOrder.ExchangeId);
                 
                 // reduce the available funds on this exchange
-                availableFundsByExchangeId[orderDetail.ExchangeId] -= fundReduction;
+                availableFundsByExchangeId[exchangeOrder.ExchangeId] -= fundReduction;
 
                 // add a new order recommendation and update the best trade
                 bestTrade = new Model.BestTrade
@@ -125,14 +125,14 @@ public class BestTradeAdviser
                         .Append(new OrderRecommendation
                         {
                             Type = tradeType,
-                            PricePerCryptoUnit = orderDetail.Order.PricePerCryptoUnit,
+                            PricePerCryptoUnit = exchangeOrder.Order.PricePerCryptoUnit,
                             CryptoAmount = amountToTrade,
-                            ExchangeId = orderDetail.ExchangeId
+                            ExchangeId = exchangeOrder.ExchangeId
                         })
                         .ToList(),
+                    RemainingAmountToTrade = bestTrade.RemainingAmountToTrade - amountToTrade,
                     TotalAmountTraded = bestTrade.TotalAmountTraded + amountToTrade,
-                    TotalPriceTraded = bestTrade.TotalPriceTraded + amountToTrade * orderDetail.Order.PricePerCryptoUnit,
-                    RemainingAmountToTrade = bestTrade.RemainingAmountToTrade - amountToTrade
+                    TotalPriceTraded = bestTrade.TotalPriceTraded + amountToTrade * exchangeOrder.Order.PricePerCryptoUnit
                 };
             }
         }
