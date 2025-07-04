@@ -1,7 +1,7 @@
 ﻿<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MetaExchange.ConsoleApp" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="$PROJECT_DIR$/MetaExchange.ConsoleApp/bin/Debug/net9.0/MetaExchange.ConsoleApp.exe" />
-    <option name="PROGRAM_PARAMETERS" value="--order-type Buy --crypto-amount 10 --root-folder-path ..\..\..\..\ExampleData\exchanges" />
+    <option name="PROGRAM_PARAMETERS" value="--root-folder-path ..\..\..\..\ExampleData\exchanges" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MetaExchange.ConsoleApp/bin/Debug/net9.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
