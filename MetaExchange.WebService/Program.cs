@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using MetaExchange.Core.Domain.BestTrade.Model;
 using MetaExchange.WebService.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,7 @@ app.UseHttpsRedirection();
 var bestTradeHandler = app.Services.GetRequiredService<BestTradeHandler>();
 app
     .MapGet("/besttrade", bestTradeHandler.TradeCryptoAtBestPrice)
-    .WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.");
+    .WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.")
+    .Produces<BestTrade>();
 
 app.Run();

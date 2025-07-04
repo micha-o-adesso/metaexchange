@@ -1,5 +1,4 @@
 ﻿using MetaExchange.Core.Domain.BestTrade;
-using MetaExchange.Core.Domain.BestTrade.Model;
 using MetaExchange.Core.Domain.Exchange.Model;
 using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 
@@ -16,12 +15,18 @@ public class BestTradeHandler
         _rootFolderPath = configuration["RootFolderPathOfExchanges"] ?? "./exchanges";
     }
     
-    public BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
+    public IResult TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
+        if (cryptoAmount < 0m)
+        {
+            return Results.BadRequest("The crypto amount to trade must be greater than or equal to 0.");
+        }
+        
         // load exchange data and calculate the best trade
         var exchangeDataProvider = new FileExchangeDataProvider(_rootFolderPath, _loggerFactory);
         var bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
-        return bestTradeAdviser.TradeCryptoAtBestPrice(tradeType, cryptoAmount);
+        var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(tradeType, cryptoAmount);
+        return Results.Ok(bestTrade);
     }
 }

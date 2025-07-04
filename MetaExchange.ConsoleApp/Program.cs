@@ -33,7 +33,7 @@ CoconaApp.Run((OrderType? orderType, decimal? cryptoAmount, string rootFolderPat
         orderType = parsedOrderType;
     }
     
-    if (!cryptoAmount.HasValue)
+    if (!cryptoAmount.HasValue || cryptoAmount < 0m)
     {
         // if the crypto amount is not specified via command line argument, prompt the user to enter it
         Console.WriteLine($"Please specify the crypto amount to trade:");
