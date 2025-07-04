@@ -54,12 +54,32 @@ In the diagram, the green boxes represent the order recommendations for a specif
 
 For selling a specified amount of cryptocurrency at the highest possible price, the algorithm is similar.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Usage
+
+## Console Application
+
+To run the console application, you can use command line arguments like the following:
+```bash
+MetaExchange.ConsoleApp.exe --order-type Buy --crypto-amount 10 --root-folder-path ..\..\..\..\ExampleData\exchanges
+```
+
+By omitting the command line arguments, you will be prompted to enter the order type (Buy/Sell) and the amount of cryptocurrency interactively:
+```bash
+MetaExchange.ConsoleApp.exe --root-folder-path ..\..\..\..\ExampleData\exchanges
+```
+
+To learn more about the command line arguments of the console application, please type:
+```bash
+MetaExchange.ConsoleApp.exe --help
+```
+## Web Service
+
+The web service provides a REST API to find the best trade.
+
+Example of a request to the web service:
+```http
+GET http://localhost:5075/besttrade?tradeType=Buy&cryptoAmount=10
+```
 
 # Build and Test
 
@@ -94,4 +114,5 @@ docker-compose -f compose.debug.yml up
 This will start the container defined in the `compose.debug.yml` file.
 
 Finally, you can access the Swagger UI of the MetaExchange.WebService at http://localhost:5075/swagger/index.html in your web browser.
+
 Or send a direct request to the API, e.g. http://localhost:5075/besttrade?tradeType=Buy&cryptoAmount=1
