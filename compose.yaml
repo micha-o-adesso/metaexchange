@@ -1,0 +1,7 @@
+﻿services:
+  metaexchange.webservice:
+    image: metaexchange.webservice
+    build:
+      context: .
+      dockerfile: MetaExchange.WebService/Dockerfile
+
