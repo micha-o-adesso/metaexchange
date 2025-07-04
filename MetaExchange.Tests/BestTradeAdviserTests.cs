@@ -24,7 +24,7 @@ public class BestTradeAdviserTests
     [Test]
     public void TestAdviserWithoutExchangeData()
     {
-        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory.CreateLogger<BestTradeAdviser>());
+        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
         var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 1m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.False);
         
@@ -37,7 +37,7 @@ public class BestTradeAdviserTests
     [Test]
     public void TestAdviserWithSingleExchange()
     {
-        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory.CreateLogger<BestTradeAdviser>());
+        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
         MockExchangeDataProvider exchangeDataProvider = new MockExchangeDataProvider([
             MockDataCreator.CreateFakeExchange(
                 "exchange1", 10m, 100000m,
@@ -108,7 +108,7 @@ public class BestTradeAdviserTests
     [Test]
     public void TestAdviserWithTwoExchanges()
     {
-        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory.CreateLogger<BestTradeAdviser>());
+        BestTradeAdviser bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
         MockExchangeDataProvider exchangeDataProvider = new MockExchangeDataProvider([
             MockDataCreator.CreateFakeExchange(
                 "exchange1", 0m, 100000m,

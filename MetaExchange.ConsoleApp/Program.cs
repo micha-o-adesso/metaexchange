@@ -8,16 +8,15 @@ using Microsoft.Extensions.Logging;
 
 CoconaApp.Run((OrderType orderType, decimal cryptoAmount, string rootFolderPath) =>
 {
-    using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+    using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
     
-    var exchangeDataProvider = new FileExchangeDataProvider(
-        rootFolderPath,
-        factory.CreateLogger<FileExchangeDataProvider>());
-
-    var bestTradeAdviser = new BestTradeAdviser(factory.CreateLogger<BestTradeAdviser>());
+    var exchangeDataProvider = new FileExchangeDataProvider(rootFolderPath, loggerFactory);
+    var bestTradeAdviser = new BestTradeAdviser(loggerFactory);
+    
     bestTradeAdviser.LoadExchanges(exchangeDataProvider);
     
     var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(orderType, cryptoAmount);
+    
     Console.WriteLine(JsonSerializer.Serialize(bestTrade, new JsonSerializerOptions
     {
         WriteIndented = true,

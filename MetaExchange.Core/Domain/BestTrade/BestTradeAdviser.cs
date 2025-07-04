@@ -16,9 +16,9 @@ public class BestTradeAdviser
     private readonly Dictionary<string, Exchange.Model.Exchange> _exchangesById = new();
     private readonly ILogger<BestTradeAdviser> _logger;
 
-    public BestTradeAdviser(ILogger<BestTradeAdviser> logger)
+    public BestTradeAdviser(ILoggerFactory loggerFactory)
     {
-        _logger = logger;
+        _logger = loggerFactory.CreateLogger<BestTradeAdviser>();
     }
     
     /// <summary>

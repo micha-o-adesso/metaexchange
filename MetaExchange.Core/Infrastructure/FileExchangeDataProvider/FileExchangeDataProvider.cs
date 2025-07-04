@@ -16,10 +16,10 @@ public class FileExchangeDataProvider : IExchangeDataProvider
     private readonly string _rootFolderPath;
     private readonly ILogger<FileExchangeDataProvider> _logger;
 
-    public FileExchangeDataProvider(string rootFolderPath, ILogger<FileExchangeDataProvider> logger)
+    public FileExchangeDataProvider(string rootFolderPath, ILoggerFactory loggerFactory)
     {
         _rootFolderPath = rootFolderPath;
-        _logger = logger;
+        _logger = loggerFactory.CreateLogger<FileExchangeDataProvider>();
     }
     
     public IEnumerable<Exchange> GetExchanges()
