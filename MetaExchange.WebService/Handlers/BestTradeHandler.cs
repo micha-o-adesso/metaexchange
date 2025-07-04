@@ -1,26 +1,27 @@
-﻿using MetaExchange.Core.Domain.BestTrade.Model;
+﻿using MetaExchange.Core.Domain.BestTrade;
+using MetaExchange.Core.Domain.BestTrade.Model;
 using MetaExchange.Core.Domain.Exchange.Model;
-using Microsoft.AspNetCore.Server.Kestrel.Transport.Quic;
+using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 
 namespace MetaExchange.WebService.Handlers;
 
 public class BestTradeHandler
 {
     private readonly ILoggerFactory _loggerFactory;
+    private readonly string _rootFolderPath;
     
-    public BestTradeHandler(ILoggerFactory loggerFactory)
+    public BestTradeHandler(ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _loggerFactory = loggerFactory;
+        _rootFolderPath = configuration["RootFolderPathOfExchanges"] ?? "./exchanges";
     }
     
-    /// <summary>
-    /// Trades at best price.
-    /// </summary>
-    /// <param name="tradeType"></param>
-    /// <param name="cryptoAmount"></param>
-    /// <returns></returns>
     public BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
-        return new BestTrade();
+        // load exchange data and calculate the best trade
+        var exchangeDataProvider = new FileExchangeDataProvider(_rootFolderPath, _loggerFactory);
+        var bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
+        bestTradeAdviser.LoadExchanges(exchangeDataProvider);
+        return bestTradeAdviser.TradeCryptoAtBestPrice(tradeType, cryptoAmount);
     }
 }
