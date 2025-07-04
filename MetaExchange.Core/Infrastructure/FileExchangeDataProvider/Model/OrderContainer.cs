@@ -5,5 +5,5 @@
 /// </summary>
 public class OrderContainer
 {
-    public Order Order { get; set; }
+    public required Order Order { get; set; }
 }

@@ -32,6 +32,16 @@ public class BestTradeAdviserTests
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 1m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.False);
+
+        try
+        {
+            bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Sell, -1m);
+            Assert.Fail();
+        }
+        catch (ArgumentException ex)
+        {
+            Assert.That(ex.ParamName, Is.EqualTo("cryptoAmount"));
+        }
     }
     
     [Test]

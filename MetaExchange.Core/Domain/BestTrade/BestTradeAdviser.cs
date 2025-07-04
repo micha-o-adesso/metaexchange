@@ -42,6 +42,13 @@ public class BestTradeAdviser
     /// <param name="cryptoAmount">The amount of cryptocurrency to trade.</param>
     public Model.BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
+        if (cryptoAmount < 0m)
+        {
+            throw new ArgumentException(
+                "The crypto amount to trade must be greater than or equal to 0.",
+                nameof(cryptoAmount));
+        }
+        
         Model.BestTrade bestTrade = new Model.BestTrade
         {
             RemainingAmountToTrade = cryptoAmount
