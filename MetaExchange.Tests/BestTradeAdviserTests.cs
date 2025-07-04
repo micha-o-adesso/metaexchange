@@ -69,27 +69,27 @@ public class BestTradeAdviserTests
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 1m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.True);
-        Assert.That(bestTrade.TotalAmount, Is.EqualTo(1m));
-        Assert.That(bestTrade.TotalPrice, Is.EqualTo(51000m));
+        Assert.That(bestTrade.TotalAmountTraded, Is.EqualTo(1m));
+        Assert.That(bestTrade.TotalPriceTraded, Is.EqualTo(51000m));
         Assert.That(bestTrade.AveragePricePerUnit, Is.EqualTo(51000m));
         Assert.That(bestTrade.RecommendedOrders.Count, Is.EqualTo(1));
         Assert.That(bestTrade.RecommendedOrders[0].ExchangeId, Is.EqualTo("exchange1"));
         Assert.That(bestTrade.RecommendedOrders[0].Type, Is.EqualTo(OrderType.Buy));
-        Assert.That(bestTrade.RecommendedOrders[0].Amount, Is.EqualTo(1m));
-        Assert.That(bestTrade.RecommendedOrders[0].Price, Is.EqualTo(51000m));
+        Assert.That(bestTrade.RecommendedOrders[0].CryptoAmount, Is.EqualTo(1m));
+        Assert.That(bestTrade.RecommendedOrders[0].PricePerCryptoUnit, Is.EqualTo(51000m));
         
         // try to sell 1 crypto unit
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Sell, 1m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.True);
-        Assert.That(bestTrade.TotalAmount, Is.EqualTo(1m));
-        Assert.That(bestTrade.TotalPrice, Is.EqualTo(50000m));
+        Assert.That(bestTrade.TotalAmountTraded, Is.EqualTo(1m));
+        Assert.That(bestTrade.TotalPriceTraded, Is.EqualTo(50000m));
         Assert.That(bestTrade.AveragePricePerUnit, Is.EqualTo(50000m));
         Assert.That(bestTrade.RecommendedOrders.Count, Is.EqualTo(1));
         Assert.That(bestTrade.RecommendedOrders[0].ExchangeId, Is.EqualTo("exchange1"));
         Assert.That(bestTrade.RecommendedOrders[0].Type, Is.EqualTo(OrderType.Sell));
-        Assert.That(bestTrade.RecommendedOrders[0].Amount, Is.EqualTo(1m));
-        Assert.That(bestTrade.RecommendedOrders[0].Price, Is.EqualTo(50000m));
+        Assert.That(bestTrade.RecommendedOrders[0].CryptoAmount, Is.EqualTo(1m));
+        Assert.That(bestTrade.RecommendedOrders[0].PricePerCryptoUnit, Is.EqualTo(50000m));
         
         // try to buy more than available crypto
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
@@ -105,14 +105,14 @@ public class BestTradeAdviserTests
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 0.5m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.True);
-        Assert.That(bestTrade.TotalAmount, Is.EqualTo(0.5m));
-        Assert.That(bestTrade.TotalPrice, Is.EqualTo(25500m));
+        Assert.That(bestTrade.TotalAmountTraded, Is.EqualTo(0.5m));
+        Assert.That(bestTrade.TotalPriceTraded, Is.EqualTo(25500m));
         Assert.That(bestTrade.AveragePricePerUnit, Is.EqualTo(51000m));
         Assert.That(bestTrade.RecommendedOrders.Count, Is.EqualTo(1));
         Assert.That(bestTrade.RecommendedOrders[0].ExchangeId, Is.EqualTo("exchange1"));
         Assert.That(bestTrade.RecommendedOrders[0].Type, Is.EqualTo(OrderType.Buy));
-        Assert.That(bestTrade.RecommendedOrders[0].Amount, Is.EqualTo(0.5m));
-        Assert.That(bestTrade.RecommendedOrders[0].Price, Is.EqualTo(51000m));
+        Assert.That(bestTrade.RecommendedOrders[0].CryptoAmount, Is.EqualTo(0.5m));
+        Assert.That(bestTrade.RecommendedOrders[0].PricePerCryptoUnit, Is.EqualTo(51000m));
     }
 
     [Test]
@@ -144,25 +144,25 @@ public class BestTradeAdviserTests
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(OrderType.Buy, 1m);
         Assert.That(bestTrade.IsFullAmountTraded, Is.True);
-        Assert.That(bestTrade.TotalAmount, Is.EqualTo(1m));
+        Assert.That(bestTrade.TotalAmountTraded, Is.EqualTo(1m));
         Assert.That(bestTrade.RecommendedOrders.Count, Is.EqualTo(3));
         
         // first order should match cheepest order from exchange1, only restricted by the order's amount
         Assert.That(bestTrade.RecommendedOrders[0].ExchangeId, Is.EqualTo("exchange1"));
         Assert.That(bestTrade.RecommendedOrders[0].Type, Is.EqualTo(OrderType.Buy));
-        Assert.That(bestTrade.RecommendedOrders[0].Amount, Is.EqualTo(0.5m));
-        Assert.That(bestTrade.RecommendedOrders[0].Price, Is.EqualTo(50000m));
+        Assert.That(bestTrade.RecommendedOrders[0].CryptoAmount, Is.EqualTo(0.5m));
+        Assert.That(bestTrade.RecommendedOrders[0].PricePerCryptoUnit, Is.EqualTo(50000m));
         
         // second order should match cheepest order from exchange2, only restricted by the available funds on this exchange
         Assert.That(bestTrade.RecommendedOrders[1].ExchangeId, Is.EqualTo("exchange2"));
         Assert.That(bestTrade.RecommendedOrders[1].Type, Is.EqualTo(OrderType.Buy));
-        Assert.That(bestTrade.RecommendedOrders[1].Amount, Is.EqualTo(0.25m));
-        Assert.That(bestTrade.RecommendedOrders[1].Price, Is.EqualTo(51000m));
+        Assert.That(bestTrade.RecommendedOrders[1].CryptoAmount, Is.EqualTo(0.25m));
+        Assert.That(bestTrade.RecommendedOrders[1].PricePerCryptoUnit, Is.EqualTo(51000m));
         
         // third order should match the remaining amount on exchange1
         Assert.That(bestTrade.RecommendedOrders[2].ExchangeId, Is.EqualTo("exchange1"));
         Assert.That(bestTrade.RecommendedOrders[2].Type, Is.EqualTo(OrderType.Buy));
-        Assert.That(bestTrade.RecommendedOrders[2].Amount, Is.EqualTo(0.25m));
-        Assert.That(bestTrade.RecommendedOrders[2].Price, Is.EqualTo(52000m));
+        Assert.That(bestTrade.RecommendedOrders[2].CryptoAmount, Is.EqualTo(0.25m));
+        Assert.That(bestTrade.RecommendedOrders[2].PricePerCryptoUnit, Is.EqualTo(52000m));
     }
 }

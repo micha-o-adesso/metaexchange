@@ -2,9 +2,12 @@
 
 namespace MetaExchange.Core.Domain.BestTrade.Model;
 
-public class OrderDetail
+/// <summary>
+/// The order detail represents an order on a specific exchange.
+/// </summary>
+public class ExchangeOrder
 {
-    public OrderDetail(string exchangeId, Order order)
+    public ExchangeOrder(string exchangeId, Order order)
     {
         ExchangeId = exchangeId;
         Order = order;

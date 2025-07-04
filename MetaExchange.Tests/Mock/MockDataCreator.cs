@@ -52,8 +52,8 @@ public static class MockDataCreator
                 ? OrderType.Buy   // positive amounts represent Buy orders
                 : OrderType.Sell, // negative amounts represent Sell orders
             Kind = OrderKind.Limit,
-            Amount = Math.Abs(orderAmountsAndPrices.Item1),
-            Price = orderAmountsAndPrices.Item2
+            CryptoAmount = Math.Abs(orderAmountsAndPrices.Item1),
+            PricePerCryptoUnit = orderAmountsAndPrices.Item2
         };
     }
 }

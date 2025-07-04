@@ -44,8 +44,8 @@ public static class ModelToDomainMapper
              Time = model.Time,
              Type = model.Type.ToDomain(),
              Kind = model.Kind.ToDomain(),
-             Amount = model.Amount,
-             Price = model.Price
+             CryptoAmount = model.Amount,
+             PricePerCryptoUnit = model.Price
          };
      }
 

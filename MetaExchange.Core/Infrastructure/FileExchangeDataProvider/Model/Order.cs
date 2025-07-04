@@ -26,12 +26,12 @@ public class Order
     public required OrderKind Kind { get; set; }
 
     /// <summary>
-    /// The amount of cryptocurrency to buy or sell (e.g. 0.01).
+    /// The amount of cryptocurrency to buy or sell (e.g. 0.01 BTC).
     /// </summary>
     public required decimal Amount { get; set; }
 
     /// <summary>
-    /// The price at which to buy or sell the cryptocurrency (e.g. 57226.46).
+    /// The price at which to buy or sell a unit of the cryptocurrency (e.g. 57226.46 EUR/BTC).
     /// </summary>
     public required decimal Price { get; set; }
 }
