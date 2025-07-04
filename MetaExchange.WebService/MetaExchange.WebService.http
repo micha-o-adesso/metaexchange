@@ -1,6 +1,6 @@
 @MetaExchange.WebService_HostAddress = http://localhost:5075
 
-GET {{MetaExchange.WebService_HostAddress}}/weatherforecast/
+GET {{MetaExchange.WebService_HostAddress}}/besttrade?tradeType=Buy&cryptoAmount=1
 Accept: application/json
 
 ###

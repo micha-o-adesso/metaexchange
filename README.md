@@ -1,5 +1,18 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+The MetaExchange solution analyzes the order books of a set of exchanges and
+outputs a set of order recommendations to execute against these order books
+in order to buy/sell a specified amount of cryptocurrency
+at the lowest/highest possible price (i.e. best trade).
+
+The solution consists of the following projects:
+- `MetaExchange.ConsoleApp`: A console application that allows users find the best trade.
+   Trade type (Buy, Sell) and cryptocurrency amount can be specified either interactive or
+   via command line arguments. The order books are read from a set of JSON files in a specified folder.
+- `MetaExchange.WebService`: A web service that that allows users find the best trade.
+   Trade type (Buy, Sell) and cryptocurrency amount can be specified as URL parameters.
+   The order books are read from a set of JSON files in a specified folder.
+- `MetaExchange.Tests`: A test project that contains unit tests for the MetaExchange.Core classes.
+- `MetaExchange.Core`: A common library that contains core functionality.
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
@@ -17,6 +30,8 @@ Make sure you have the required SDKs and dependencies installed.
 There are launch settings for the projects
 - `MetaExchange.ConsoleApp` for the console application
 - `MetaExchange.WebService` for the web service
+
+Simply select the desired run/debug configuration in Visual Studio or Rider and start debugging.
 
 To run the unit tests, you can use the Test Explorer in Visual Studio.
 Make sure to select the test project `MetaExchange.Tests` and run all tests.
