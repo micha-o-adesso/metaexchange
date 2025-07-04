@@ -45,6 +45,13 @@ For each Ask, it generates an order recommendation by checking:
 After processing all Asks, the algorithm returns a list of order recommendations and
 indicates whether the specified amount of cryptocurrency was fully bought or not.
 
+In the diagram, the green boxes represent the order recommendations for a specific example:
+- the first two Asks from both exchanges were bought fully
+- the second Ask from Exchange 2 was partially bought because there was not enough Euro on the exchange anymore
+- the second Ask from Exchange 1 was bought fully
+- the third Ask from Exchange 1 was partially bought because the specified amount of cryptocurrency was already reached
+- all other Asks were skipped
+
 For selling a specified amount of cryptocurrency at the highest possible price, the algorithm is similar.
 
 # Getting Started
