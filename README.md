@@ -60,7 +60,7 @@ For selling a specified amount of cryptocurrency at the highest possible price, 
 
 To run the console application, you can use command line arguments like the following:
 ```bash
-MetaExchange.ConsoleApp.exe --order-type Buy --crypto-amount 10 --root-folder-path ..\..\..\..\ExampleData\exchanges
+MetaExchange.ConsoleApp.exe --order-type Buy --crypto-amount 0.27 --root-folder-path ..\..\..\..\ExampleData\exchanges
 ```
 
 By omitting the command line arguments, you will be prompted to enter the order type (Buy/Sell) and the amount of cryptocurrency interactively:
