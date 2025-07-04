@@ -1,11 +1,13 @@
 using System.Text.Json.Serialization;
-using MetaExchange.Core.Domain.Exchange.Model;
+using MetaExchange.WebService.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<BestTradeHandler>();
 
 // https://stackoverflow.com/questions/76643787/how-to-make-enum-serialization-default-to-string-in-minimal-api-endpoints-and-sw
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -31,9 +33,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/besttrade", (OrderType orderType, decimal cryptoAmount) =>
-{
-    
-}).WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.");
+var bestTradeHandler = app.Services.GetRequiredService<BestTradeHandler>();
+app
+    .MapGet("/besttrade", bestTradeHandler.TradeCryptoAtBestPrice)
+    .WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.");
 
 app.Run();
