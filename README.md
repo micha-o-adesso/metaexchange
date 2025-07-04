@@ -23,6 +23,30 @@ The solution is implemented in C# and uses .NET 9 as the target framework.
 Solution structure:
 ![Solution structure](/Documentation/MetaExchange.ProjectStructure.png)
 
+## Best Trade Algorithm
+
+The solution implements a greedy algorithm to find the best trade.
+
+The following diagram illustrates the algorithm's behavior for buying
+a specified amount of cryptocurrency at the lowest possible price.
+
+To achieve this, the algorithm analyzes the Asks (sell orders) in the order books of the exchanges.
+
+![Algorithm](/Documentation/MetaExchange.Algorithm.png)
+
+First, it sorts the Asks by price in ascending order.
+Then, it iterates through the sorted list of Asks (starting with the lowest price)
+and tries to accumulate the specified amount of cryptocurrency.
+For each Ask, it generates an order recommendation by checking:
+- Does it have to buy the full amount of cryptocurrency from this Ask, or just a part?
+- Does it have enough Euro on this exchange to buy the amount?
+  - If not, it buys as much as possible from this Ask and moves to the next Ask.
+
+After processing all Asks, the algorithm returns a list of order recommendations and
+indicates whether the specified amount of cryptocurrency was fully bought or not.
+
+For selling a specified amount of cryptocurrency at the highest possible price, the algorithm is similar.
+
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
