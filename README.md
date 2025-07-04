@@ -9,12 +9,34 @@ TODO: Guide users through getting your code up and running on their own system. 
 4.	API references
 
 # Build and Test
-TODO: Describe and show how to build your code and run the tests. 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## Visual Studio / Rider
+To build the solution, open the `MetaExchange.sln` file and start the build.
+Make sure you have the required SDKs and dependencies installed.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+There are launch settings for the projects
+- `MetaExchange.ConsoleApp` for the console application
+- `MetaExchange.WebService` for the web service
+
+To run the unit tests, you can use the Test Explorer in Visual Studio.
+Make sure to select the test project `MetaExchange.Tests` and run all tests.
+
+## Docker
+Make sure you have Docker and Docker Compose installed on your machine.
+
+To build the Docker image of the MetaExchange.WebService, you can use the following command from the root directory of the solution:
+
+```bash
+docker-compose build
+```
+
+When the build is complete, you can run the Docker container using the following command:
+
+```bash
+docker-compose -f compose.debug.yml up
+```
+
+This will start the container defined in the `compose.debug.yml` file.
+
+Finally, you can access the Swagger UI of the MetaExchange.WebService at http://localhost:5075/swagger/index.html in your web browser.
+Or send a direct request to the API, e.g. http://localhost:5075/besttrade?tradeType=Buy&cryptoAmount=1
