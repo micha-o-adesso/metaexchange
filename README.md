@@ -14,6 +14,15 @@ The solution consists of the following projects:
 - `MetaExchange.Tests`: A test project that contains unit tests for the MetaExchange.Core classes.
 - `MetaExchange.Core`: A common library that contains core functionality.
 
+# Implementation Details
+
+## Solution structure
+
+The solution is implemented in C# and uses .NET 9 as the target framework.
+
+Solution structure:
+![Solution structure](/Documentation/MetaExchange.ProjectStructure.png)
+
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
