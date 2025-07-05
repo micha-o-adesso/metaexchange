@@ -1,21 +1,27 @@
 ﻿using MetaExchange.Core.Domain.BestTrade;
+using MetaExchange.Core.Domain.Exchange;
 using MetaExchange.Core.Domain.Exchange.Model;
-using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MetaExchange.WebService.Handlers;
 
-public class BestTradeHandler
+public static class BestTradeHandler
 {
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly string _rootFolderPath;
-    
-    public BestTradeHandler(ILoggerFactory loggerFactory, IConfiguration configuration)
-    {
-        _loggerFactory = loggerFactory;
-        _rootFolderPath = configuration["RootFolderPathOfExchanges"] ?? "./exchanges";
-    }
-    
-    public IResult TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
+    /// <summary>
+    /// Analyzes the order books of all exchanges and outputs a set of orders to execute
+    /// against these order books in order to buy/sell the specified amount
+    /// of cryptocurrency at the lowest/highest possible price.
+    /// </summary>
+    /// <param name="tradeType">The type of the trade (i.e. Buy or Sell).</param>
+    /// <param name="cryptoAmount">The amount of cryptocurrency to trade.</param>
+    /// <param name="exchangeDataProvider"></param>
+    /// <param name="bestTradeAdviser"></param>
+    /// <returns></returns>
+    public static IResult TradeCryptoAtBestPrice(
+        OrderType tradeType,
+        decimal cryptoAmount,
+        [FromServices] IExchangeDataProvider exchangeDataProvider,
+        [FromServices] BestTradeAdviser bestTradeAdviser)
     {
         if (cryptoAmount < 0m)
         {
@@ -23,8 +29,6 @@ public class BestTradeHandler
         }
         
         // load exchange data and calculate the best trade
-        var exchangeDataProvider = new FileExchangeDataProvider(_rootFolderPath, _loggerFactory);
-        var bestTradeAdviser = new BestTradeAdviser(_loggerFactory);
         bestTradeAdviser.LoadExchanges(exchangeDataProvider);
         var bestTrade = bestTradeAdviser.TradeCryptoAtBestPrice(tradeType, cryptoAmount);
         return Results.Ok(bestTrade);

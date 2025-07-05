@@ -1,5 +1,8 @@
 using System.Text.Json.Serialization;
+using MetaExchange.Core.Domain.BestTrade;
 using MetaExchange.Core.Domain.BestTrade.Model;
+using MetaExchange.Core.Domain.Exchange;
+using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
 using MetaExchange.WebService.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<BestTradeHandler>();
+// configure dependency injection
+var rootFolderPath = builder.Configuration["RootFolderPathOfExchanges"] ?? "./exchanges";
+builder.Services.AddSingleton<IExchangeDataProvider>(sp => new FileExchangeDataProvider(
+    rootFolderPath,
+    sp.GetRequiredService<ILoggerFactory>()));
+builder.Services.AddSingleton<BestTradeAdviser>();
 
 // https://stackoverflow.com/questions/76643787/how-to-make-enum-serialization-default-to-string-in-minimal-api-endpoints-and-sw
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -34,9 +42,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var bestTradeHandler = app.Services.GetRequiredService<BestTradeHandler>();
 app
-    .MapGet("/besttrade", bestTradeHandler.TradeCryptoAtBestPrice)
+    .MapGet("/besttrade", BestTradeHandler.TradeCryptoAtBestPrice)
     .WithDescription("Analyzes the order books of all exchanges and outputs a set of orders to execute against these order books in order to buy/sell the specified amount of cryptocurrency at the lowest/highest possible price.")
     .Produces<BestTrade>()
     .Produces(StatusCodes.Status400BadRequest);
