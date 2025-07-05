@@ -12,7 +12,8 @@ The solution consists of the following projects:
    Trade type (Buy, Sell) and cryptocurrency amount can be specified as URL parameters.
    The order books are read from a set of JSON files in a specified folder.
 - `MetaExchange.Tests`: A test project that contains unit tests for the MetaExchange.Domain library.
-- `MetaExchange.Domain`: A common library that contains the pure core functionality to find the best trade.
+- `MetaExchange.Domain`: A common library that contains the pure core functionality to find the best trade
+   from the order books of a set of exchanges.
 - `MetaExchange.Infrastructure`: A common library that contains infrastructure functionality, e.g. to read
    exchange data from JSON files and to convert it into domain objects.
 
