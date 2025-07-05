@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MetaExchange.Core\MetaExchange.Core.csproj" />
+      <ProjectReference Include="..\MetaExchange.Domain\MetaExchange.Domain.csproj" />
+      <ProjectReference Include="..\MetaExchange.Infrastructure\MetaExchange.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
-﻿using MetaExchange.Core.Domain.BestTrade.Model;
-using MetaExchange.Core.Domain.Exchange;
-using MetaExchange.Core.Domain.Exchange.Model;
+﻿using MetaExchange.Domain.Modules.BestTrade.Model;
+using MetaExchange.Domain.Modules.Exchange;
+using MetaExchange.Domain.Modules.Exchange.Model;
 using Microsoft.Extensions.Logging;
 
-namespace MetaExchange.Core.Domain.BestTrade;
+namespace MetaExchange.Domain.Modules.BestTrade;
 
 /// <summary>
 /// The best trade adviser is the main component of MetaExchange's core functionality.
@@ -40,7 +40,7 @@ public class BestTradeAdviser
     /// </summary>
     /// <param name="tradeType">The type of the trade (i.e. Buy or Sell).</param>
     /// <param name="cryptoAmount">The amount of cryptocurrency to trade.</param>
-    public Model.BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
+    public Modules.BestTrade.Model.BestTrade TradeCryptoAtBestPrice(OrderType tradeType, decimal cryptoAmount)
     {
         if (cryptoAmount < 0m)
         {
@@ -49,7 +49,7 @@ public class BestTradeAdviser
                 nameof(cryptoAmount));
         }
         
-        Model.BestTrade bestTrade = new Model.BestTrade
+        Modules.BestTrade.Model.BestTrade bestTrade = new Modules.BestTrade.Model.BestTrade
         {
             RemainingAmountToTrade = cryptoAmount
         };
@@ -119,7 +119,7 @@ public class BestTradeAdviser
                 availableFundsByExchangeId[exchangeOrder.ExchangeId] -= fundReduction;
 
                 // add a new order recommendation and update the best trade
-                bestTrade = new Model.BestTrade
+                bestTrade = new Modules.BestTrade.Model.BestTrade
                 {
                     RecommendedOrders = bestTrade.RecommendedOrders
                         .Append(new OrderRecommendation

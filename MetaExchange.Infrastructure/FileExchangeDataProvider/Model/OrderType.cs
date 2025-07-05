@@ -1,8 +1,11 @@
-namespace MetaExchange.Core.Domain.Exchange.Model;
+using System.Text.Json.Serialization;
+
+namespace MetaExchange.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The type of the order (i.e. Buy or Sell).
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum OrderType
 {
     /// <summary>

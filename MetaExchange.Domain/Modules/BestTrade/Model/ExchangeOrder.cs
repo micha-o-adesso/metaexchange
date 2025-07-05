@@ -1,6 +1,6 @@
-﻿using MetaExchange.Core.Domain.Exchange.Model;
+﻿using MetaExchange.Domain.Modules.Exchange.Model;
 
-namespace MetaExchange.Core.Domain.BestTrade.Model;
+namespace MetaExchange.Domain.Modules.BestTrade.Model;
 
 /// <summary>
 /// The order detail represents an order on a specific exchange.

@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain.BestTrade.Model;
+﻿namespace MetaExchange.Domain.Modules.BestTrade.Model;
 
 /// <summary>
 /// The best trade contains recommended orders to buy/sell a specified

@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
-using MetaExchange.Core.Domain.Exchange;
-using MetaExchange.Core.Domain.Exchange.Model;
-using MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Mapping;
+using MetaExchange.Domain.Modules.Exchange;
+using MetaExchange.Domain.Modules.Exchange.Model;
+using MetaExchange.Infrastructure.FileExchangeDataProvider.Mapping;
 using Microsoft.Extensions.Logging;
 
-namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
+namespace MetaExchange.Infrastructure.FileExchangeDataProvider;
 
 /// <summary>
 /// An exchange data provider that reads exchange data from JSON files in a specified directory.
@@ -35,12 +35,12 @@ public class FileExchangeDataProvider : IExchangeDataProvider
         }
     }
     
-    private Infrastructure.FileExchangeDataProvider.Model.Exchange? DeserializeExchange(string jsonFilePath)
+    private MetaExchange.Infrastructure.FileExchangeDataProvider.Model.Exchange? DeserializeExchange(string jsonFilePath)
     {
         try
         {
             using var fileStream = File.OpenRead(jsonFilePath);
-            var exchange = JsonSerializer.Deserialize<Infrastructure.FileExchangeDataProvider.Model.Exchange>(fileStream, new JsonSerializerOptions
+            var exchange = JsonSerializer.Deserialize<MetaExchange.Infrastructure.FileExchangeDataProvider.Model.Exchange>(fileStream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 AllowTrailingCommas = true

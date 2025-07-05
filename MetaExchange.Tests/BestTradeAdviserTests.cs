@@ -1,5 +1,5 @@
-﻿using MetaExchange.Core.Domain.BestTrade;
-using MetaExchange.Core.Domain.Exchange.Model;
+﻿using MetaExchange.Domain.Modules.BestTrade;
+using MetaExchange.Domain.Modules.Exchange.Model;
 using MetaExchange.Tests.Mock;
 using Microsoft.Extensions.Logging;
 

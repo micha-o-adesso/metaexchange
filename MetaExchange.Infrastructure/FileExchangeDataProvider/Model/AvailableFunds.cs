@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Model;
+﻿namespace MetaExchange.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The available funds on an exchange, i.e. which amounts of cryptocurrency

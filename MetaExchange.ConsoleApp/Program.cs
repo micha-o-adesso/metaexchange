@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cocona;
-using MetaExchange.Core.Domain.BestTrade;
-using MetaExchange.Core.Domain.Exchange.Model;
-using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
+using MetaExchange.Domain.Modules.BestTrade;
+using MetaExchange.Domain.Modules.Exchange.Model;
+using MetaExchange.Infrastructure.FileExchangeDataProvider;
 using Microsoft.Extensions.Logging;
 
 // set the current culture to invariant culture to ensure consistent parsing of decimal numbers

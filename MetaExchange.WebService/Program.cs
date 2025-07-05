@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
-using MetaExchange.Core.Domain.BestTrade;
-using MetaExchange.Core.Domain.BestTrade.Model;
-using MetaExchange.Core.Domain.Exchange;
-using MetaExchange.Core.Infrastructure.FileExchangeDataProvider;
+using MetaExchange.Domain.Modules.BestTrade;
+using MetaExchange.Domain.Modules.BestTrade.Model;
+using MetaExchange.Domain.Modules.Exchange;
+using MetaExchange.Infrastructure.FileExchangeDataProvider;
 using MetaExchange.WebService.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);

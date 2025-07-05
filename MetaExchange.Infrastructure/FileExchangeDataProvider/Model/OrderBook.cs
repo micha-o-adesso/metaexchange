@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain.Exchange.Model;
+﻿namespace MetaExchange.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The order book represents the current state of buy and sell orders on an exchange.
@@ -8,10 +8,10 @@ public class OrderBook
     /// <summary>
     /// The buy orders in the order book.
     /// </summary>
-    public List<Order> Bids { get; init; } = [];
+    public List<OrderContainer> Bids { get; set; } = [];
     
     /// <summary>
     /// The sell orders in the order book.
     /// </summary>
-    public List<Order> Asks { get; init; } = [];
+    public List<OrderContainer> Asks { get; set; } = [];
 }

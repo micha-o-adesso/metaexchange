@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Infrastructure.FileExchangeDataProvider.Model;
+﻿namespace MetaExchange.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The exchange represents a trading platform where users can buy and sell cryptocurrencies.

@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain.Exchange.Model;
+﻿namespace MetaExchange.Domain.Modules.Exchange.Model;
 
 /// <summary>
 /// The order represents a buy or sell transaction for a cryptocurrency on an exchange.

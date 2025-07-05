@@ -1,4 +1,4 @@
-﻿using MetaExchange.Core.Domain.Exchange.Model;
+﻿using MetaExchange.Domain.Modules.Exchange.Model;
 
 namespace MetaExchange.Tests.Mock;
 

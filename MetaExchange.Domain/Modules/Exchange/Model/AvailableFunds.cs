@@ -1,4 +1,4 @@
-﻿namespace MetaExchange.Core.Domain.Exchange.Model;
+﻿namespace MetaExchange.Domain.Modules.Exchange.Model;
 
 /// <summary>
 /// The available funds on an exchange, i.e. which amounts of cryptocurrency

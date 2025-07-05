@@ -1,8 +1,11 @@
-namespace MetaExchange.Core.Domain.Exchange.Model;
+using System.Text.Json.Serialization;
+
+namespace MetaExchange.Infrastructure.FileExchangeDataProvider.Model;
 
 /// <summary>
 /// The kind of the order. Currently only Limit orders are allowed.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum OrderKind
 {
     /// <summary>
