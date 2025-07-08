@@ -13,7 +13,7 @@ CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
 
 // use Cocona to create a console application which parses command line arguments
 // example usage:
-// MetaExchange.ConsoleApp.exe --order-type Buy --crypto-amount 0.27 --root-folder-path ..\..\..\..\ExampleData\exchanges
+// MetaExchange.ConsoleApp.exe --order-type Buy --crypto-amount 0.27 --root-folder-path ../../../../ExampleData/exchanges
 CoconaApp.Run((OrderType? orderType, decimal? cryptoAmount, string rootFolderPath) =>
 {
     using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder
