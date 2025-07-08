@@ -49,7 +49,7 @@ public class FileExchangeDataProvider : IExchangeDataProvider
         }
         catch (Exception e)
         {
-            _logger.LogError("Could not parse {JsonFilePath}: {Exception}", jsonFilePath, e);
+            _logger.LogError(e, "Could not parse {JsonFilePath}", jsonFilePath);
             return null;
         }
     }
