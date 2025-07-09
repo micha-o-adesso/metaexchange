@@ -4,4 +4,10 @@
     build:
       context: .
       dockerfile: MetaExchange.WebService/Dockerfile
-
+    ports:
+      - "5075:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RootFolderPathOfExchanges=/exchanges
+    volumes:
+      - ./ExampleData/exchanges:/exchanges:ro

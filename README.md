@@ -111,10 +111,10 @@ docker-compose build
 When the build is complete, you can run the Docker container using the following command:
 
 ```bash
-docker-compose -f compose.debug.yml up
+docker-compose up
 ```
 
-This will start the container defined in the `compose.debug.yml` file.
+This will start the container defined in the `compose.yml` file.
 
 Finally, you can access the Swagger UI of the MetaExchange.WebService at http://localhost:5075/swagger/index.html in your web browser.
 
